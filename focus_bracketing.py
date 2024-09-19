@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import os
+import argparse
 
 
 def load_and_align_images(image_paths):
@@ -23,11 +24,21 @@ def focus_stack(images):
     return images[best_idx]
 
 
-image_dir = 'C:/_sw/eb_python/photography/focus_bracketing/jpg'
-image_paths = [os.path.join(image_dir, file) for file in os.listdir(image_dir) if file.endswith('.JPG')]
-images = load_and_align_images(image_paths)
-stacked_image = focus_stack(images)
-cv2.imwrite(f'{image_dir}/stacked_image.jpg', stacked_image)
-# cv2.imshow("Stacked Image", stacked_image)
-# cv2.waitKey(0)
-# cv2.destroyAllWindows()
+def main(image_dir, output_format):
+    image_paths = [os.path.join(image_dir, file) for file in os.listdir(image_dir) if file.lower().endswith(('.jpg', '.jpeg', '.png'))]
+    images = load_and_align_images(image_paths)
+    stacked_image = focus_stack(images)
+    output_file = os.path.join(image_dir, f'stacked_image.{output_format}')
+    cv2.imwrite(output_file, stacked_image)
+    cv2.imshow("Stacked Image", stacked_image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Focus stacking from images in a directory.')
+    parser.add_argument('image_dir', type=str, help='Directory containing input images.')
+    parser.add_argument('output_format', type=str, choices=['jpg', 'jpeg', 'png'], help='Output image format.')
+
+    args = parser.parse_args()
+    main(args.image_dir, args.output_format)
