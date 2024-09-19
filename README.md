@@ -37,6 +37,10 @@
 
 <br />
 
-**youtube_playlist_downloader.py**: downloads all videos from a specified in a playlist at highest resolution
+**youtube_playlist_downloader.py**: downloads all videos from a specified playlist at highest resolution.
+
+<br />
+
+**youtube_video_downloader.py**: download video from a specified link on youtube.
 
 <br />
