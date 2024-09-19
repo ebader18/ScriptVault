@@ -9,6 +9,10 @@
 
 <br />
 
+**capture_and_save_frames.py**: captures video from a specified camera and resolution, displays it in a window, and saves frames in specified format either continuously or when the "s" key is pressed.
+
+<br />
+
 **exposure_bracketing.py**: merges a set of images into a HDR image using Debevec's method, applies tone mapping with the Drago algorithm. **NEEDS TO BE CLEANED!!!**
 
 <br />
