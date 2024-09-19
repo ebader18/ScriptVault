@@ -12,3 +12,5 @@
 <br />
 **ping_and_mac_lookup.py**: pings a range of IP addresses to check if they are active and retrieves their corresponding MAC addresses.
 <br />
+**audio_converter.py**: converts a specified portion of an MP3 audio file to a user-defined output format using customizable start and end times.
+<br />
