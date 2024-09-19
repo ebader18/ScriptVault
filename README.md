@@ -17,7 +17,7 @@
 
 <br />
 
-**focus_bracketing.py**: loads and aligns a set of images to correct for any misalignment, and measures their focus using the Laplacian variance.
+**focus_bracketing.py**: loads and aligns a set of images to correct for any misalignment, and measures their focus using the Laplacian variance. Some images available [here](https://drive.google.com/drive/folders/1Op8h0eOcZYrlj4iR7D295u9tvyClZ8W9?usp=drive_link).
 
 <br />
 
