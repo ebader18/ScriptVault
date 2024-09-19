@@ -21,6 +21,10 @@
 
 <br />
 
+**generate_checkerboard.py**: generate a checkerboard specified rows, columns and square dimensions in mm
+
+<br />
+
 **images_converter.py**: convert images in a folder to a new format via argument.
 
 <br />
