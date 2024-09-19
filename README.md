@@ -36,3 +36,7 @@
 **ping_and_mac_lookup.py**: pings a range of IP addresses to check if they are active and retrieves their corresponding MAC addresses.
 
 <br />
+
+**youtube_playlist_downloader.py**: downloads all videos from a specified in a playlist at highest resolution
+
+<br />
