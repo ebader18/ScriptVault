@@ -1,5 +1,5 @@
 # Rules
-* Make sure to use arguments so the code doesn't need to be updated
+* Make sure to use arguments so the code doesn't need to be updated.
 * Provide some guidance for the arguments.
 
 **pdf2img.py**: convert a pdf document into individual png images.
