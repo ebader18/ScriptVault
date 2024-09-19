@@ -10,3 +10,5 @@
 <br />
 **focus_bracketing.py**: loads and aligns a set of images to correct for any misalignment, and measures their focus using the Laplacian variance.
 <br />
+**ping_and_mac_lookup.py**: pings a range of IP addresses to check if they are active and retrieves their corresponding MAC addresses.
+<br />
