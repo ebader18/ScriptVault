@@ -13,7 +13,7 @@
 
 <br />
 
-**exposure_bracketing.py**: merges a set of images into a HDR image using Debevec's method, applies tone mapping with the Drago algorithm. **NEEDS TO BE CLEANED!!!**
+**exposure_bracketing.py**: merges a set of images into a HDR image using Debevec's method, applies tone mapping with the Drago algorithm. Images available [here](https://drive.google.com/drive/folders/16-3vWLWw1SpPDpkC1yF37cP3Sku5fXHu), results [here](https://drive.google.com/drive/folders/1fhJNViVH0bUm1GN1uZzsgA843Ft016oU?usp=drive_link). **NEEDS TO BE CLEANED!!!**
 
 <br />
 
