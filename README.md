@@ -9,6 +9,10 @@
 
 <br />
 
+**calibrate_camera_with_chessboard.py**: Compute intrinsic parameters from chessboard images. Specify path to images, path to json file for storing intrinsic parameters, and chessboard pattern.
+
+<br />
+
 **capture_and_save_frames.py**: captures video from a specified camera and resolution, displays it in a window, and saves frames in specified format either continuously or when the "s" key is pressed.
 
 <br />
