@@ -33,6 +33,10 @@
 
 <br />
 
+**ip_mac_scanner.py**: Scan devices on network.  Specify start and end ip address range.
+
+<br />
+
 **pdf2img.py**: convert a pdf document into individual png images.
 
 <br />
