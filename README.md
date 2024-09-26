@@ -29,6 +29,10 @@
 
 <br />
 
+**offline_speech2text.py**: Uses Whisper AI to convert an audio file's speech to text. Specifies path for audio file and generated text file.
+
+<br />
+
 **pdf2img.py**: convert a pdf document into individual png images.
 
 <br />
