@@ -49,6 +49,10 @@
 
 <br />
 
+**video_trimming.py**: Trim a selected video file, provide start and end time.
+
+<br />
+
 **youtube_playlist_downloader.py**: downloads all videos from a specified playlist at highest resolution.
 
 <br />
