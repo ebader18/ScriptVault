@@ -9,6 +9,10 @@
 
 <br />
 
+**calibrate_camera_with_chessboard.py**: Compute intrinsic parameters from chessboard images. Specify path to images, path to json file for storing intrinsic parameters, and chessboard pattern.
+
+<br />
+
 **capture_and_save_frames.py**: captures video from a specified camera and resolution, displays it in a window, and saves frames in specified format either continuously or when the "s" key is pressed.
 
 <br />
@@ -29,7 +33,7 @@
 
 <br />
 
-**offline_speech2text.py**: Uses Whisper AI to convert an audio file's speech to text. Specifies path for audio file and generated text file.
+**ip_mac_scanner.py**: Scan devices on network.  Specify start and end ip address range.
 
 <br />
 
@@ -42,6 +46,10 @@
 <br />
 
 **video_converter.py**: Convert a selected video file to a selected video format.
+
+<br />
+
+**video_trimming.py**: Trim a selected video file, provide start and end time.
 
 <br />
 
