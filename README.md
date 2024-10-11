@@ -45,6 +45,10 @@
 
 <br />
 
+**stereo_camera_projection.py**: Calculate disparity based on a point in world coordinate system and the camera's baseline, resolution and field-of-view.
+
+<br />
+
 **video_converter.py**: Convert a selected video file to a selected video format.
 
 <br />
