@@ -9,7 +9,7 @@
 
 <br />
 
-**calibrate_camera_with_chessboard.py**: Compute intrinsic parameters from chessboard images. Specify path to images, path to json file for storing intrinsic parameters, and chessboard pattern.
+**calibrate_fisheye_with_chessboard.py**: Compute intrinsic parameters from chessboard images. Specify path to images, path to json file for storing intrinsic parameters, and chessboard pattern.
 
 <br />
 
