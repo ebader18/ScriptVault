@@ -29,6 +29,10 @@
 
 <br />
 
+**image2icon.py**: convert an images to icon.
+
+<br />
+
 **images_converter.py**: convert images in a folder to a new format via argument.
 
 <br />
