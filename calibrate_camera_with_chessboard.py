@@ -8,11 +8,11 @@ import os
 parser = argparse.ArgumentParser(description='Camera calibration using chessboard images.')
 parser.add_argument('--image_folder', type=str, required=True, help='Path to the folder containing calibration images.')
 parser.add_argument('--output_file', type=str, required=True, help='Name of the output JSON file to store calibration parameters.')
-parser.add_argument('--pattern_size', type=str, required=True, help='Pattern size in the format width,height (e.g., 9,6).')
+parser.add_argument('--inner_corners_size', type=str, required=True, help='Number of inner corners in the format width,height (e.g., 9,6).')
 args = parser.parse_args()
 
 # Parse pattern size
-pattern_size = tuple(map(int, args.pattern_size.split(',')))
+pattern_size = tuple(map(int, args.inner_corners_size.split(',')))
 
 # Parameters
 termination_criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -29,6 +29,7 @@ objpoints = []  # 3D points in real world space
 imgpoints = []  # 2D points in image plane
 
 # Loop over images
+good_images = 0
 for fname in images:
     img = cv2.imread(fname)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -38,6 +39,7 @@ for fname in images:
 
     # If found, add object points, image points
     if ret:
+        good_images += 1
         objpoints.append(objp)
 
         # Refine the corners
@@ -66,3 +68,4 @@ with open(f'{args.output_file}.json', 'w') as json_file:
     json.dump(calibration_data, json_file, indent=4)
 
 print(f'Calibration parameters saved to {args.output_file}.')
+print(f'{good_images} good images used.')

@@ -1,6 +1,5 @@
 import cv2
 import argparse
-import time
 
 # Argument parsing
 ap = argparse.ArgumentParser()
@@ -23,7 +22,8 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, vres)
 idx_img = 0
 while cap.isOpened():
     succes, img = cap.read()
-    k = cv2.waitKey(5)
+    img = cv2.flip(img, 1)
+    k = cv2.waitKey(1)
     if k == 27 or k == ord('q'):
         break
     elif args["save_all"] == 'y' or k == ord('s'):  # wait for 's' key to save
