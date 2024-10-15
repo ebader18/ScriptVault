@@ -1,44 +1,52 @@
+# Interesting link: https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-333b05afa0b0
+#                   https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-part-2-13990f1b157f
+
+
 import cv2
 import json
 import argparse
 import numpy as np
 
-# Set up argument parser
-parser = argparse.ArgumentParser(description='Show non-corrected and fisheye-corrected images using calibration parameters.')
-parser.add_argument('--image', type=str, required=True, help='Path to the input image.')
-parser.add_argument('--calibration_file', type=str, required=True, help='Path to the JSON file containing fisheye calibration parameters.')
-args = parser.parse_args()
 
-# Load the image
-img = cv2.imread(args.image)
-if img is None:
-    print(f"Error: Could not read image from {args.image}")
-    exit()
+def undistort(img, K, D, balance=0.0, dim2=None, dim3=None):
+    dim1 = img.shape[:2][::-1]  # dim1 is the dimension of input image to un-distort
+    if not dim2:
+        dim2 = dim1
+    if not dim3:
+        dim3 = dim1
 
-# Load calibration parameters from JSON file
-with open(args.calibration_file, 'r') as f:
-    calib_data = json.load(f)
+    # This is how scaled_K, dim2 and balance are used to determine the final K used to un-distort image. OpenCV document failed to make this clear!
+    new_K = cv2.fisheye.estimateNewCameraMatrixForUndistortRectify(K, D, dim2, np.eye(3), balance=balance)
+    mapx, mapy = cv2.fisheye.initUndistortRectifyMap(K, D, np.eye(3), new_K, dim3, cv2.CV_16SC2)
+    undistorted_img = cv2.remap(img, mapx, mapy, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
 
-# Extract the intrinsic matrix and distortion coefficients
-K = np.array(calib_data['K'])
-D = np.array(calib_data['D'])
+    # Display both the original and corrected images side by side
+    concatenated = np.hstack((img, undistorted_img))
 
-# Get the image size
-h, w = img.shape[:2]
+    return concatenated
 
-# Compute undistortion map using the fisheye module
-mapx, mapy = cv2.fisheye.initUndistortRectifyMap(K, D, np.eye(3), K, (w, h), cv2.CV_32FC1)
-undistorted_img = cv2.remap(img, mapx, mapy, interpolation=cv2.INTER_LINEAR)
 
-# Resize the undistorted image to match the original for display purposes
-undistorted_img_resized = cv2.resize(undistorted_img, (img.shape[1], img.shape[0]))
+if __name__ == '__main__':
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description='Show non-corrected and fisheye-corrected images using calibration parameters.')
+    parser.add_argument('--image_path', type=str, required=True, help='Path to the input image.')
+    parser.add_argument('--calibration_path', type=str, required=True, help='Path to the JSON file containing fisheye calibration parameters.')
+    args = parser.parse_args()
 
-# Display both the original and corrected images side by side
-concatenated = np.hstack((img, undistorted_img_resized))
+    # Load image
+    img = cv2.imread(args.image_path)
+    if img is None:
+        print(f"Error: Could not read image from {args.image_path}")
+        exit()
 
-# Show the images
-cv2.imshow('Original (Left) vs Fisheye Corrected (Right)', concatenated)
+    # Load calibration parameters from JSON file
+    with open(args.calibration_path, 'r') as f:
+        calib = json.load(f)
 
-# Wait for a key press and close the window
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    K = np.array(calib['K'])
+    D = np.array(calib['D'])
+    concatenated = undistort(img, K, D, balance=1.0)
+
+    cv2.imshow('Original (Left) vs Fisheye Corrected (Right)', concatenated)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()

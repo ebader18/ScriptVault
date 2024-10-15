@@ -1,3 +1,6 @@
+# Interesting link: https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-333b05afa0b0
+#                   https://medium.com/@kennethjiang/calibrate-fisheye-lens-using-opencv-part-2-13990f1b157f
+
 import cv2
 import numpy as np
 import argparse
