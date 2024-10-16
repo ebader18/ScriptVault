@@ -25,8 +25,7 @@ def undistort(img, K, D, balance=0.0, dim2=None, dim3=None):
 
     return concatenated
 
-
-if __name__ == '__main__':
+def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description='Show non-corrected and fisheye-corrected images using calibration parameters.')
     parser.add_argument('--image_path', type=str, required=True, help='Path to the input image.')
@@ -50,3 +49,7 @@ if __name__ == '__main__':
     cv2.imshow('Original (Left) vs Fisheye Corrected (Right)', concatenated)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+
+if __name__ == '__main__':
+    main()

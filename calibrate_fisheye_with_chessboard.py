@@ -54,7 +54,7 @@ def compute_intrinsic_distortion(images_path, pattern_size):
     return K, D
 
 
-if __name__ == '__main__':
+def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description='Fisheye camera calibration using chessboard images.')
     parser.add_argument('--image_folder', type=str, required=True, help='Path to the folder containing calibration images.')
@@ -79,3 +79,7 @@ if __name__ == '__main__':
         json.dump(calibration_data, json_file, indent=4)
 
     print(f'Fisheye calibration parameters saved to {args.output_file}.json')
+
+
+if __name__ == '__main__':
+    main()
