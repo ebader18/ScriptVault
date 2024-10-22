@@ -5,6 +5,15 @@ import json
 import os, glob
 
 
+# Check for NaNs or infs in points
+def check_points_validity(points):
+    for i, p in enumerate(points):
+        if np.isnan(p).any() or np.isinf(p).any():
+            print(f"Invalid values found in points at index {i}")
+            return False
+    return True
+
+
 def stereo_fisheye_calibrate(left_image_folder, right_image_folder, pattern_size, K_left, D_left, K_right, D_right):
     # Prepare object points (real-world coordinates for chessboard corners)
     objp = np.zeros((np.prod(pattern_size), 1, 3), np.float32)
@@ -29,34 +38,64 @@ def stereo_fisheye_calibrate(left_image_folder, right_image_folder, pattern_size
     #    print(f"Error: Mask length {len(mask)} does not match the number of image pairs {len(left_image_folder)}.")
     #    return None, None, None, None
 
+    mask = np.ones(33)
+    # mask[0:15] = 0
     # Loop through each image pair, using the mask to decide whether to include the image or not
     for i, (left_img_path, right_img_path) in enumerate(zip(left_image_folder, right_image_folder)):
-        if i == 10:
-            break
+        if mask[i]:
+            # Read the images
+            img_left = cv2.imread(left_img_path)
+            img_right = cv2.imread(right_img_path)
 
-        # Read the images
-        img_left = cv2.imread(left_img_path)
-        img_right = cv2.imread(right_img_path)
+            # Convert to grayscale
+            gray_left = cv2.cvtColor(img_left, cv2.COLOR_BGR2GRAY)
+            gray_right = cv2.cvtColor(img_right, cv2.COLOR_BGR2GRAY)
 
-        # Convert to grayscale
-        gray_left = cv2.cvtColor(img_left, cv2.COLOR_BGR2GRAY)
-        gray_right = cv2.cvtColor(img_right, cv2.COLOR_BGR2GRAY)
+            # Find chessboard corners in both images
+            ret_left, corners_left = cv2.findChessboardCorners(gray_left, pattern_size, None)
+            ret_right, corners_right = cv2.findChessboardCorners(gray_right, pattern_size, None)
 
-        # Find chessboard corners in both images
-        ret_left, corners_left = cv2.findChessboardCorners(gray_left, pattern_size, None)
-        ret_right, corners_right = cv2.findChessboardCorners(gray_right, pattern_size, None)
+            if ret_left and ret_right:
+                '''if ret_left:
+                    cv2.drawChessboardCorners(img_left, pattern_size, corners_left, ret_left)
+                    cv2.putText(img_left, left_img_path, (30, 30), cv2.FONT_HERSHEY_COMPLEX, 1.0, (0, 0, 0), 1)
+                    cv2.imshow('Left Chessboard', img_left)
+                if ret_right:
+                    cv2.putText(img_right, right_img_path, (30, 30), cv2.FONT_HERSHEY_COMPLEX, 1.0, (0, 0, 0), 1)
+                    cv2.drawChessboardCorners(img_right, pattern_size, corners_right, ret_right)
+                    cv2.imshow('Right Chessboard', img_right)
+                cv2.waitKey(0)  # Wait for a key press to proceed to the next image pair'''
 
-        if ret_left and ret_right:
-            # Refine corner detection
-            corners_left = cv2.cornerSubPix(gray_left, corners_left, (11, 11), (-1, -1), (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001))
-            corners_right = cv2.cornerSubPix(gray_right, corners_right, (11, 11), (-1, -1), (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001))
+                # Refine corner detection
+                corners_left = cv2.cornerSubPix(gray_left, corners_left, (11, 11), (-1, -1), (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001))
+                corners_right = cv2.cornerSubPix(gray_right, corners_right, (11, 11), (-1, -1), (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001))
 
-            # Append object points and image points
-            objpoints.append(objp)
-            left_imgpoints.append(corners_left)
-            right_imgpoints.append(corners_right)
-        else:
-            print(f"Chessboard not found in pair: {left_img_path} and {right_img_path}")
+                # Append object points and image points
+                objpoints.append(objp)
+                left_imgpoints.append(corners_left)
+                right_imgpoints.append(corners_right)
+
+                '''# print("Checking object points for validity...")
+                if not check_points_validity(objpoints):
+                    print("Error: Invalid object points detected.")
+                    return None, None, None, None
+
+                # print("Checking left image points for validity...")
+                if not check_points_validity(left_imgpoints):
+                    print("Error: Invalid left image points detected.")
+                    return None, None, None, None
+
+                # print("Checking right image points for validity...")
+                if not check_points_validity(right_imgpoints):
+                    print("Error: Invalid right image points detected.")
+                    return None, None, None, None'''
+
+                '''if len(objpoints) == len(left_imgpoints) == len(right_imgpoints):
+                    print("Points arrays are of equal length.")
+                else:
+                    print("Error: Points arrays have mismatched lengths.")'''
+            else:
+                print(f"Chessboard not found in pair: {left_img_path} and {right_img_path}")
 
     # Check if any valid pairs are left after applying the mask
     if len(objpoints) == 0:
@@ -69,19 +108,22 @@ def stereo_fisheye_calibrate(left_image_folder, right_image_folder, pattern_size
     E = np.zeros((3, 3))  # Essential matrix
     F = np.zeros((3, 3))  # Fundamental matrix
 
-    # index = 5
-    # objpoints = objpoints[0:index]
-    # left_imgpoints = left_imgpoints[0:index]
-    # right_imgpoints = right_imgpoints[0:index]
-
     # Perform stereo calibration using the fisheye model
+    # D_left = np.zeros((4, 1))  # Disable distortion for testing
+    # D_right = np.zeros((4, 1))  # Disable distortion for testing
+    # flags = cv2.fisheye.CALIB_FIX_INTRINSIC
+    flags = cv2.fisheye.CALIB_RECOMPUTE_EXTRINSIC + cv2.fisheye.CALIB_CHECK_COND
     ret, R, T, E, F = cv2.fisheye.stereoCalibrate(
         objpoints, left_imgpoints, right_imgpoints,
         K_left, D_left, K_right, D_right,
-        gray_left.shape[::-1],
+        gray_left.shape[::-1],  # Numpy wants [h, w] whereas OpenCV wants [w, h]
         R, T, E, F,
-        flags=cv2.fisheye.CALIB_FIX_INTRINSIC
+        flags=flags
     )
+    if not ret:
+        print("Stereo calibration failed with status:", ret)
+    else:
+        print("Stereo calibration succeeded.")
 
     return R, T, E, F
 
