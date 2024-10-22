@@ -46,7 +46,10 @@ def main(playlist_url):
     print(f"Found {len(video_urls)} videos in the playlist.")
     for i, video_url in enumerate(video_urls, start=1):
         print(f"Downloading audio for video {i}/{len(video_urls)}: {video_url}")
-        download_audio(video_url)
+        try:
+            download_audio(video_url)
+        except Exception as e:
+            print(f"Failed to download audio for {video_url}: {e}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Download audio from all videos in a YouTube playlist.')
