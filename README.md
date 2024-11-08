@@ -29,6 +29,10 @@
 
 <br />
 
+**h5_2_txt.py**: convert a hdf5 file into individual text file per dataset
+
+<br />
+
 **image2icon.py**: convert an images to icon.
 
 <br />
