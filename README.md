@@ -41,6 +41,10 @@
 
 <br />
 
+**img2video.py**: convert images in a folder to a video in a selected format
+
+<br />
+
 **ip_mac_scanner.py**: Scan devices on network.  Specify start and end ip address range.
 
 <br />
